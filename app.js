@@ -1,10 +1,15 @@
 let controller;
 let slideScene;
 let pageScene;
-let mouse =
+const mouse =
 	document.querySelector(".cursor");
-let mouseTxt =
+const mouseTxt =
 	mouse.querySelector("span");
+const burger =
+	document.querySelector(".burger");
+
+//even listener
+
 window.addEventListener(
 	"mousemove",
 	cursor
@@ -14,6 +19,13 @@ window.addEventListener(
 	"mouseover",
 	activeCursor
 );
+
+burger.addEventListener(
+	"click",
+	navToggle
+);
+
+//function
 
 function animateSlides() {
 	//Init controller
@@ -76,7 +88,7 @@ function animateSlides() {
 					reverse: false,
 				})
 					.setTween(slideTl)
-					.addIndicators()
+
 					.addTo(controller);
 			//New animation
 			const pageTl = gsap.timeline();
@@ -108,12 +120,6 @@ function animateSlides() {
 					duration: "100%",
 				}
 			)
-				.addIndicators({
-					colorStart: "white",
-					colorTrigger: "yellow",
-					name: "page",
-					indent: "200",
-				})
 				.setPin(slide, {
 					pushFollowers: false,
 				})
@@ -146,12 +152,68 @@ function activeCursor(e) {
 		mouse.classList.add(
 			"explore-active"
 		);
+		gsap.to(".title-swipe", 1, {
+			y: "0%",
+		});
 		mouseTxt.innerText = "Tap";
 	} else {
 		mouse.classList.remove(
 			"explore-active"
 		);
 		mouseTxt.innerText = "";
+		gsap.to(".title-swipe", 1, {
+			y: "100%",
+		});
+	}
+}
+
+function navToggle(e) {
+	if (
+		!e.target.classList.contains(
+			"active"
+		)
+	) {
+		e.target.classList.add("active");
+		gsap.to(".line1", 0.5, {
+			rotate: "45",
+			y: 5,
+			background: "black",
+		});
+		gsap.to(".line2", 0.5, {
+			rotate: "-45",
+			y: -5,
+			background: "black",
+		});
+		gsap.to("#logo", 1, {
+			color: "black ",
+		});
+		gsap.to(".nav-bar", 1, {
+			clipPath:
+				"circle(2500px at 100% -10%)",
+		});
+		document.body.classList.add("hide");
+	} else {
+		e.target.classList.remove("active");
+		gsap.to(".line1", 0.5, {
+			rotate: "0",
+			y: 0,
+			background: "white",
+		});
+		gsap.to(".line2", 0.5, {
+			rotate: "0",
+			y: 0,
+			background: "white",
+		});
+		gsap.to("#logo", 1, {
+			color: "white ",
+		});
+		gsap.to(".nav-bar", 1, {
+			clipPath:
+				"circle(50px at 100% -10%)",
+		});
+		document.body.classList.remove(
+			"hide"
+		);
 	}
 }
 
