@@ -217,4 +217,64 @@ function navToggle(e) {
 	}
 }
 
-animateSlides();
+//Barba page transition
+
+barba.init({
+	views: [
+		{
+			namespace: "home",
+			beforeEnter() {
+				animateSlides();
+			},
+			beforeLeave() {
+				slideScene.destroy();
+				pageScene.destroy();
+				controller.destroy();
+			},
+		},
+		{
+			namespace: "fashion",
+		},
+	],
+	transition: [
+		{
+			leave({ current, next }) {
+				let done = this.async();
+
+				//animation
+				const tl = gsap.timeline({
+					defaults: {
+						ease: "power2.inOut",
+					},
+				});
+				tl.fromTo(
+					current.container,
+					1,
+					{ opacity: 1 },
+					{
+						opacity: 0,
+						onComplete: done,
+					}
+				);
+			},
+			enter({ current, next }) {
+				let done = this.async();
+				//animation
+				const tl = gsap.timeline({
+					defaults: {
+						ease: "power2.inOut",
+					},
+				});
+				tl.fromTo(
+					next.container,
+					1,
+					{ opacity: 0 },
+					{
+						opacity: 1,
+						onComplete: done,
+					}
+				);
+			},
+		},
+	],
+});
